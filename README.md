@@ -4,7 +4,7 @@
 A C# project to take the message export Facebook gives and turn it into something more machine readable. Might extend to creating a frontend for reading them. Maybe. 
 
 
-## Hierarchy
+## Hierarchy of Export (message.htm file)
 * Start in the div `.contents`
 * It apparently has several divs in it for some fucking reason (probably related to health of the DOM)
 * Each chat has a div for it with class `.thread`
