@@ -12,7 +12,7 @@ namespace Facebook_Messenger_Export
         public DateTime Time { get; }
         public string SenderID { get;}
         public string SenderName { get; }
-        public string ThreadId { get; }
+        public string ThreadId { get; } 
         
 
         /// <summary>
