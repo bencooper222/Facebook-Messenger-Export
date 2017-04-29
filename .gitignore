@@ -241,3 +241,7 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 Facebook-Messenger-Export/messages.htm
+threads
+Facebook-Messenger-Export/test.html
+*.config
+Facebook-Messenger-Export/App.config
