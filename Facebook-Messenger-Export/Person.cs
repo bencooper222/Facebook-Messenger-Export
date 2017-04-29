@@ -19,9 +19,10 @@ namespace Facebook_Messenger_Export
         }
         private int count;
 
-        public Person(string name, string uid)
+        public Person(string uid,string name = null)
         {
-
+            Name = name;
+            UID = uid;
         }
 
         /// <summary>

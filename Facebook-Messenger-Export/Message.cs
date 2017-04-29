@@ -27,13 +27,26 @@ namespace Facebook_Messenger_Export
             ThreadId = "";
         }
 
-        /// <summary>
-        /// Constructs the class from the plaintext of the div
-        /// </summary>
-        /// <param name="divText">The plaintext of the div</param>
-        public Message(string divText)
-        {
 
+       
+
+        public Message(string text, string date, string senderID,string threadId)
+        {
+            Text = text;
+            Time = ParseDate(date);
+            SenderID = senderID;
+            SenderName = null; // worry about later
+            ThreadId = threadId;
+        }
+
+        /// <summary>
+        /// Takes the date string FB provides and turns it into a DateTime object
+        /// </summary>
+        /// <param name="date">The (bad) DateTime string FB provides</param>
+        /// <returns></returns>
+        private DateTime ParseDate(string date)
+        {
+            return new DateTime();
         }
 
 
