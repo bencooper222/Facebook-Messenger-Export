@@ -243,6 +243,6 @@ ModelManifest.xml
 Facebook-Messenger-Export/messages.htm
 threads
 Facebook-Messenger-Export/test.html
-*.config
 Facebook-Messenger-Export/App.config
 Facebook-Messenger-Export/single-thread-container.html
+CSharp Parser/Facebook-Messenger-Export/App.config
