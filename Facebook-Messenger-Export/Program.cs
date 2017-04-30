@@ -13,19 +13,15 @@ namespace Facebook_Messenger_Export
     { //http://www.nudoq.org/#!/Packages/HtmlAgilityPack/HtmlAgilityPack
         static void Main(string[] args)
         {
-            /*
-            HtmlDocument doc = new HtmlDocument();
-            doc.Load(@"C:\Users\benco\Documents\Visual Studio 2015\Projects\Facebook-Messenger-Export\threads\0.html");
-
-
-            Thread test = new Thread(doc);
             
-            */
-            DateTimeOffset time = DateTime.ParseExact("Monday, January 2, 2017 at 11:56pm", "dddd, MMMM d, yyyy 'at' h:mmtt", CultureInfo.InvariantCulture);
-             Console.WriteLine(time);
-            DateTimeOffset date1 = new DateTime(2017, 1, 2, 23, 56,0);
-      
-            Console.WriteLine(date1.ToString("dddd, MMMM d, yyyy 'at' h:mmtt K"));
+            HtmlDocument doc = new HtmlDocument();
+            doc.Load(@"C:\Users\benco\Documents\Visual Studio 2015\Projects\Facebook-Messenger-Export\threads\1.html");
+
+
+            Thread test = new Thread(doc,0);
+            
+            
+            
             /*
             doc.Load(ConfigurationManager.AppSettings["messageLocation"]);
 
