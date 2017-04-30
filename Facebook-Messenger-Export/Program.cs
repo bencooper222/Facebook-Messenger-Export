@@ -19,6 +19,7 @@ namespace Facebook_Messenger_Export
 
 
             Thread test = new Thread(doc,0);
+            Console.WriteLine(test.Messages[0].ToJson());
             
             
             

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,7 +40,13 @@ namespace Facebook_Messenger_Export
             ThreadId = threadId;
         }
 
-      
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        public void GetName
+
 
 
     }
