@@ -34,10 +34,10 @@ namespace Facebook_Messenger_Export
             HtmlNode body = thread.DocumentNode.FirstChild.ChildNodes.Where(w => w.Name == "body").ToList()[0];
             List<HtmlNode> nodes = body.ChildNodes.Where(w => w.Name != "#text").ToList(); // eliminates whitespace text nodes
 
-            Participants = CreateListOfParticipants(body.FirstChild.InnerText); 
+            Participants = CreateListOfParticipants(body.FirstChild.InnerText);
 
-            
-            for (int i= 0; i< (nodes.Count)/2; i++){
+            Messages = new List<Message>();
+            for (int i= 0; i< nodes.Count; i+=2){
                 AddMessage(nodes[i].ChildNodes[1], nodes[i + 1]);
             }
 
