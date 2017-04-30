@@ -23,9 +23,11 @@ namespace Facebook_Messenger_Export
         /// <param name="zoneString">Simple abbreviation like "EST"</param>
         public Moment(string timeString, string zoneString)
         {
-            IDictionary<string, string> something = TZNames.GetFixedTimeZoneAbbreviations("en-US");
-            Time = DateTime.ParseExact(timeString, "dddd, MMMM d, yyyy 'at' h:mmtt", CultureInfo.InvariantCulture); 
-            Zone = TimeZoneInfo.FindSystemTimeZoneById(zoneString);
+            //IDictionary<string, string> something = TZNames.GetFixedTimeZoneAbbreviations("en-US");
+
+            Time = DateTime.ParseExact(timeString, "dddd, MMMM d, yyyy 'at' h:mmtt", CultureInfo.InvariantCulture);
+            //    Zone = TimeZoneInfo.FindSystemTimeZoneById(zoneString);
+            Zone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
             
         }
 
