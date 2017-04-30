@@ -88,7 +88,14 @@ namespace Facebook_Messenger_Export
 
         public string MessagesToJson()
         {
-            return JsonConvert.SerializeObject(Messages);
+            List<MessageJsonWrapper> messageJsons = new List<MessageJsonWrapper>();
+
+            // use Wrappers to advantage
+            foreach(Message m  in Messages)
+            {
+                messageJsons.Add(new MessageJsonWrapper(m));
+            }
+            return JsonConvert.SerializeObject(messageJsons);
         }
 
        

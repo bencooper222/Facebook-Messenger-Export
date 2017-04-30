@@ -31,6 +31,9 @@ namespace Facebook_Messenger_Export
         public void AddMessageCount()
         {
             count++;
+            
         }
+
+        
     }
 }
