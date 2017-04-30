@@ -9,10 +9,10 @@ namespace Facebook_Messenger_Export
     class Message
     {
         public string Text { get; }
-        public Moment Time { get; }
+        public DateTime Time { get; }
         public string SenderID { get;}
         public string SenderName { get; }
-        public int ThreadId { get; } 
+        public string ThreadId { get; } 
         
 
         /// <summary>
@@ -21,25 +21,33 @@ namespace Facebook_Messenger_Export
         public Message()
         {
             Text = "";
-            Time = new Moment();
+            Time = new DateTime();
             SenderID = "";
             SenderName = "";
-            ThreadId = -1; // not sure what the default should be
+            ThreadId = "";
         }
 
 
        
 
-        public Message(string text, Moment time, string senderID,int threadId)
+        public Message(string text, string date, string senderID,string threadId)
         {
             Text = text;
-            Time = time;
+            Time = ParseDate(date);
             SenderID = senderID;
             SenderName = null; // worry about later
             ThreadId = threadId;
         }
 
-      
+        /// <summary>
+        /// Takes the date string FB provides and turns it into a DateTime object
+        /// </summary>
+        /// <param name="date">The (bad) DateTime string FB provides</param>
+        /// <returns></returns>
+        private DateTime ParseDate(string date)
+        {
+            return new DateTime();
+        }
 
 
     }

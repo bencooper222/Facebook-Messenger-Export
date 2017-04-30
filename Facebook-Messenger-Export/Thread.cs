@@ -5,15 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
-using System.Globalization;
 
 namespace Facebook_Messenger_Export
 {
     class Thread
     {
-        public List<Message> Messages { get; } // is this the best data structure?
-        public List<Person> Participants { get; }
-        public int UID { get; }
+        List<Message> Messages { get; } // is this the best data structure?
+        List<Person> Participants { get; }
 
         /// <summary>
         /// Default contstructor
@@ -25,21 +23,11 @@ namespace Facebook_Messenger_Export
             Participants = participants;
         }
 
-        public Thread(HtmlDocument thread, int id)
+        public Thread(HtmlDocument thread)
         {
-            UID = id;
-
-
-
-            HtmlNode body = thread.DocumentNode.FirstChild.ChildNodes.Where(w => w.Name == "body").ToList()[0];
-            List<HtmlNode> nodes = body.ChildNodes.Where(w => w.Name != "#text").ToList(); // eliminates whitespace text nodes
-
-            Participants = CreateListOfParticipants(body.FirstChild.InnerText); 
-
+            HtmlNode body = thread.DocumentNode.ChildNodes.First().ChildNodes.ToList()[0]; // annoying to extract
+            Participants = CreateListOfParticipants(body.FirstChild.InnerText);
             
-            for (int i= 0; i< (nodes.Count)/2; i++){
-                AddMessage(nodes[i].ChildNodes[1], nodes[i + 1]);
-            }
 
         }
 
@@ -69,22 +57,20 @@ namespace Facebook_Messenger_Export
         /// <param name="messageHeader">The tag with class message_header</param>
         /// <param name="pStuff">Stuff in the p (the actual message)</param>
         /// <returns>A nice message object with the information</returns>
-        private void AddMessage(HtmlNode messageHeader, HtmlNode paragraphTag)
+        private Message AddMessage(HtmlNode messageHeader, HtmlNode paragraphTag)
         {
-            HtmlNodeCollection attributes = messageHeader.ChildNodes;
-
-            // first tag
-            string facebookEmail = attributes[0].InnerText;
-
-            // process time (second tag)
-            string rawTime = attributes[1].InnerText;
-            Moment time = new Moment(rawTime.Remove(rawTime.Length - 4, 4), rawTime.Remove(0, rawTime.Length - 3));
-
-            Message message = new Message(paragraphTag.InnerText,time,facebookEmail.Remove(facebookEmail.Length-13,13),UID);
-            Messages.Add(message);                           
+            //   Message message = new Message(paragraphTag.InnerHtml,)
+            return new Message();
         }
-        
 
-       
+
+        /// <summary>
+        /// Adds a message to the thread
+        /// </summary>
+        /// <param name="msg"></param>
+        public void AddMessage(Message msg)
+        {
+
+        }
     }
 }
