@@ -15,11 +15,11 @@ namespace Facebook_Messenger_Export
         {
             
             HtmlDocument doc = new HtmlDocument();
-            doc.Load(@"C:\Users\benco\Documents\Visual Studio 2015\Projects\Facebook-Messenger-Export\threads\1.html");
+            doc.Load(@"C:\Users\benco\Documents\Visual Studio 2015\Projects\Facebook-Messenger-Export\CSharp Parser\threads\1.html");
 
 
             Thread test = new Thread(doc,0);
-            Console.WriteLine(test.Messages[0].ToJson());
+            Console.WriteLine(test.MessagesToJson());
             
             
             

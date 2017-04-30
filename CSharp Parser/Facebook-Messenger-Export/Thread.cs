@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace Facebook_Messenger_Export
 {
@@ -84,6 +85,11 @@ namespace Facebook_Messenger_Export
             Messages.Add(message);                           
         }
         
+
+        public string MessagesToJson()
+        {
+            return JsonConvert.SerializeObject(Messages);
+        }
 
        
     }

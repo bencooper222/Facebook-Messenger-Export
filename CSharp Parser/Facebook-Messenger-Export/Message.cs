@@ -10,7 +10,7 @@ namespace Facebook_Messenger_Export
     class Message
     {
         public string Text { get; }
-        public Moment Time { get; }
+        public Moment SentTime { get; }
         public string SenderID { get;}
         public string SenderName { get; }
         public int ThreadId { get; } 
@@ -22,7 +22,7 @@ namespace Facebook_Messenger_Export
         public Message()
         {
             Text = "";
-            Time = new Moment();
+            SentTime = new Moment();
             SenderID = "";
             SenderName = "";
             ThreadId = -1; // not sure what the default should be
@@ -34,7 +34,7 @@ namespace Facebook_Messenger_Export
         public Message(string text, Moment time, string senderID,int threadId)
         {
             Text = text;
-            Time = time;
+            SentTime = time;
             SenderID = senderID;
             SenderName = null; // worry about later
             ThreadId = threadId;
@@ -45,7 +45,7 @@ namespace Facebook_Messenger_Export
             return JsonConvert.SerializeObject(this);
         }
 
-        public void GetName
+    //    public void GetName
 
 
 

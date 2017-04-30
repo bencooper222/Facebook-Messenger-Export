@@ -21,6 +21,8 @@ A C# project to take the message export Facebook gives and turn it into somethin
         * Still would like links that could be accessed by people with actual auth :/
 
 
+## Getting Long Lived Facebook Token
+Follow instructions here http://stackoverflow.com/questions/17197970/facebook-permanent-page-access-token
 
 ## License
 MIT

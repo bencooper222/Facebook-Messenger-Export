@@ -64,6 +64,8 @@
   <ItemGroup>
     <Compile Include="IdLookupFactory.cs" />
     <Compile Include="Message.cs" />
+    <Compile Include="JsonWrappers\MessageJsonWrapper.cs" />
+    <Compile Include="JsonWrappers\MomentJsonWrapper.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
