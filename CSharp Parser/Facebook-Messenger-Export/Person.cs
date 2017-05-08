@@ -47,42 +47,7 @@ namespace Facebook_Messenger_Export
     //     DotNetOpenAuth.OAuth.ChannelElements.   
         }
 
-        /// <summary>
-        /// Use Facebook Graph ID to get Name
-        /// </summary>
-        /// <returns>Boolen for success or failure</returns>
-        public bool GetName()
-        {
-          //  StreamWriter logger = new StreamWriter(ConfigurationManager.AppSettings["logLocation"]+ @"\graph-api-logs.txt");
-            try
-            {
-                var url = "https://graph.facebook.com/v2.9/";
-                var client = new RestClient(url + UID + "?oauth_token=" + ConfigurationManager.AppSettings["fbAccessToken"] + "&oauth_signature_method=HMAC-SHA1 " + "&oauth_timestamp=1494281247&oauth_nonce=NQBv1w&oauth_version=1.0&oauth_signature=fBcO9HTiU4gG%20FEHjnTRM5bFAbc%3D");
-                var request = new RestRequest(Method.GET);
-                request.Timeout = 1000;
-                request.AddHeader("cache-control", "no-cache");
-                JObject response = JObject.Parse(client.Execute(request).Content);
-
-                name = response["name"].ToString();
-                File.AppendAllText(ConfigurationManager.AppSettings["logLocation"] + @"\graph-api-logs.txt", DateTime.UtcNow + ": SUCCESS: " + UID + ": " + Name + Environment.NewLine);
-              
-            }
-            catch (Exception e)
-            {
-                File.AppendAllText(ConfigurationManager.AppSettings["logLocation"] + @"\graph-api-logs.txt", DateTime.UtcNow + ": FAILURE: " + UID + ": " + e + Environment.NewLine);
-
-   
-           
-                return false;   
-            }
-            //logger.Close();
-            
-
-            return true;
-
-         
-
-        }
+        
 
 
     }
