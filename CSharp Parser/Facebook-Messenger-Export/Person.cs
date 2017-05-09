@@ -20,6 +20,10 @@ namespace Facebook_Messenger_Export
             {
                 return name;
             }
+            set
+            {
+                name = value;
+            }
         }
 
         public string UID { get; }
