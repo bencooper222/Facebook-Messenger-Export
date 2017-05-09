@@ -196,7 +196,12 @@ public class BiDictionaryOneToOne<TFirst, TSecond>
     /// <returns>First keys (second's values)</returns>
     public List<TFirst> GetFirstKeys()
     {
-        return (List<TFirst>)firstToSecond.Keys;
+        List<TFirst> rtn = new List<TFirst>();
+          foreach(TFirst s in firstToSecond.Keys)
+        {
+            rtn.Add(s);
+        }
+        return rtn;
     }
 
     /// <summary>
@@ -205,6 +210,13 @@ public class BiDictionaryOneToOne<TFirst, TSecond>
     /// <returns>Second keys (first's values)</returns>
     public List<TSecond> GetSecondKeys()
     {
-        return (List<TSecond>)secondToFirst.Keys;
+
+        List<TSecond> rtn = new List<TSecond>();
+        foreach (TSecond s in secondToFirst.Keys)
+        {
+            rtn.Add(s);
+        }
+        return rtn;
+        
     }
 }

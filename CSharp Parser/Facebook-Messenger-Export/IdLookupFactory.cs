@@ -16,9 +16,10 @@ namespace Facebook_Messenger_Export
 
         BiDictionaryOneToOne<string, string> idNames; // uid, name
 
-        public IdLookupFactory()
+        public IdLookupFactory(string importPath = null)
         {
-            idNames = new BiDictionaryOneToOne<string, string>();  
+            idNames = new BiDictionaryOneToOne<string, string>();
+            if(importPath!=null) LoadFromFile(importPath); 
         }
 
 
@@ -26,26 +27,74 @@ namespace Facebook_Messenger_Export
         {
             StreamReader reader = new StreamReader(path);
 
+            bool isFirst = true;
             while (reader.Peek() >= 0) // creds to http://www.sanfoundry.com/csharp-program-read-lines-until-end-file/
             {
                 string[] line = reader.ReadLine().Split(',');
-                idNames.Add(line[0], line[1]);
+                if (!isFirst) // first line should be the header
+                {
+                    
+                    idNames.Add(line[0], line[1]);
+                }
+                else
+                {
+                    isFirst = false; 
+                }
+                
             }
-
+            reader.Close();
         }
         
-        public void CreateCSV(string path)
+        public void AddToCSV(string path)
         {
-            StreamWriter writer = new StreamWriter(path);
+            
             List<string> uids = idNames.GetFirstKeys();
             List<string> names = idNames.GetSecondKeys();
 
-            writer.WriteLine("UID,Name");
+            // super costly/shitty way of doing this
+            IdLookupFactory duplicateCheck = new IdLookupFactory(path);
+           
+         
 
             for (int i=0; i < idNames.Count; i++)
             {
-                writer.WriteLine(uids[i] + "," + names[i]);
+                if (!duplicateCheck.ContainsUID(uids[i]))
+                {
+                    File.AppendAllText(path, uids[i] + "," + names[i] + Environment.NewLine);
+                }
+                
             }
+           
+        }
+
+        private bool ContainsUID(string uid)
+        {
+            try
+            {
+                idNames.GetByFirst(uid);
+                
+            }
+            catch(Exception e)
+            {
+                return false; // if it can't be found
+            }
+            return true;
+            
+        }
+
+        private bool ContainsName(string name)
+        {
+            try
+            {
+                idNames.GetBySecond(name);
+
+            }
+            catch (Exception e)
+            {
+                return false; // if it can't be found
+            }
+            return true;
+
         }
 
 
@@ -62,6 +111,7 @@ namespace Facebook_Messenger_Export
             string rtn;
             try
             {
+                Console.WriteLine("No API request");
                 rtn = idNames.GetByFirst(uid);
                 return rtn; 
             }
@@ -76,7 +126,7 @@ namespace Facebook_Messenger_Export
         private string FBApiRequest(string uid)
         {
 
-            string logLocation = ConfigurationManager.AppSettings["logLocation"] + @"\graph-api-logs.txt";
+            string logLocation = ConfigurationManager.AppSettings["private"] + @"\Logs\graph-api-logs.txt";
             string result;
             try
             {
