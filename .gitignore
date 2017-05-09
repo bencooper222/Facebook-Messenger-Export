@@ -240,7 +240,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-Facebook-Messenger-Export/messages.htm
+Facebook-Messenger-Export/CSharp Parser/Facebook-Messenger-Export/messages.htm
 threads
 Facebook-Messenger-Export/test.html
 Facebook-Messenger-Export/App.config
