@@ -24,12 +24,14 @@ namespace Facebook_Messenger_Export
             
             HtmlDocument doc = new HtmlDocument();
             string threadId = "29";
-            doc.Load(@"C:\Users\benco\Documents\Visual Studio 2015\Projects\Facebook-Messenger-Export\CSharp Parser\threads\" + threadId + ".html");
+            string privateLocation = ConfigurationManager.AppSettings["private"];
+            doc.Load(privateLocation + @"\threads\" + threadId + ".html");
 
-            IdLookupFactory factory = new IdLookupFactory();
+            IdLookupFactory factory = new IdLookupFactory(privateLocation+@"\idNames.csv");
 
             Thread test = new Thread(doc,0,factory);
-            Console.WriteLine(test.MessagesToJson());
+            test.WriteJsonToFile(privateLocation + @"\jsons\" + threadId + ".json");
+            factory.AddToCSV(privateLocation + @"\idNames.csv");
             
             
            

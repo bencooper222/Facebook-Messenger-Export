@@ -7,6 +7,7 @@ using HtmlAgilityPack;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace Facebook_Messenger_Export
 {
@@ -121,7 +122,7 @@ namespace Facebook_Messenger_Export
         }
         
 
-        public string MessagesToJson()
+        public string MessagesToJson(bool prettify =false)
         {
             List<MessageJsonWrapper> messageJsons = new List<MessageJsonWrapper>();
 
@@ -130,7 +131,23 @@ namespace Facebook_Messenger_Export
             {
                 messageJsons.Add(new MessageJsonWrapper(m));
             }
-            return JsonConvert.SerializeObject(messageJsons);
+
+            if (prettify)
+            {
+                return JsonConvert.SerializeObject(messageJsons,Formatting.Indented);
+            }
+            else
+            {
+                return JsonConvert.SerializeObject(messageJsons);
+            }
+           
+        }
+
+        public void WriteJsonToFile(string path,bool prettify = false)
+        {
+            StreamWriter writer = new StreamWriter(path);
+            writer.Write(MessagesToJson(prettify));
+            writer.Close();
         }
 
        
