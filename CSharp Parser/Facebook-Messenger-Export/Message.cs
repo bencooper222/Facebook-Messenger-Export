@@ -12,7 +12,7 @@ namespace Facebook_Messenger_Export
         public string Text { get; }
         public Moment SentTime { get; }
         public string SenderID { get;}
-        public string SenderName { get; }
+        public string SenderName { get; set; }
         public int ThreadId { get; } 
         
 
@@ -31,18 +31,18 @@ namespace Facebook_Messenger_Export
 
        
 
-        public Message(string text, Moment time, string senderID,int threadId)
+        public Message(string text, Moment time, int threadId, string senderID, string senderName = null)
         {
             Text = text;
             SentTime = time;
             SenderID = senderID;
-            SenderName = null; // worry about later
+            SenderName = senderName; // worry about later
             ThreadId = threadId;
         }
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(new MessageJsonWrapper(this));
         }
 
     //    public void GetName
