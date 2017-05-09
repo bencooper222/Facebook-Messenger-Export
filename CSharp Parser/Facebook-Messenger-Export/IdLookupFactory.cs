@@ -14,29 +14,61 @@ namespace Facebook_Messenger_Export
     {
 
 
-        Dictionary<string, string> idNames;
+        BiDictionaryOneToOne<string, string> idNames; // uid, name
 
         public IdLookupFactory()
         {
-            idNames = new Dictionary<string, string>(); 
+            idNames = new BiDictionaryOneToOne<string, string>();  
         }
 
+
+        public void LoadFromFile(string path)
+        {
+            StreamReader reader = new StreamReader(path);
+
+            while (reader.Peek() >= 0) // creds to http://www.sanfoundry.com/csharp-program-read-lines-until-end-file/
+            {
+                string[] line = reader.ReadLine().Split(',');
+                idNames.Add(line[0], line[1]);
+            }
+
+        }
+        
+        public void CreateCSV(string path)
+        {
+            StreamWriter writer = new StreamWriter(path);
+            List<string> uids = idNames.GetFirstKeys();
+            List<string> names = idNames.GetSecondKeys();
+
+            writer.WriteLine("UID,Name");
+
+            for (int i=0; i < idNames.Count; i++)
+            {
+                writer.WriteLine(uids[i] + "," + names[i]);
+            }
+        }
+
+
+        public string GetUID(string name)
+        {
+            return idNames.GetBySecond(name);
+        }
         /// <summary>
-        /// Use Facebook Graph ID to get Name
+        /// Use Facebook Graph API to get Name from UID
         /// </summary>
-        /// <returns>The name. Is empty string if it can't locate it</returns>
+        /// <returns>The name. Can return null if not locateable</returns>
         public string GetName(string uid)
         {
             string rtn;
             try
             {
-                rtn = idNames[uid];
+                rtn = idNames.GetByFirst(uid);
                 return rtn; 
             }
             catch 
             {
                 rtn =  FBApiRequest(uid);
-                idNames.Add(uid, rtn);
+                idNames.Add(uid, rtn); // prevent extraneous requests
                 return rtn;
             }
         }
@@ -45,7 +77,7 @@ namespace Facebook_Messenger_Export
         {
 
             string logLocation = ConfigurationManager.AppSettings["logLocation"] + @"\graph-api-logs.txt";
-            string name;
+            string result;
             try
             {
                 var url = "https://graph.facebook.com/v2.9/";
@@ -56,22 +88,23 @@ namespace Facebook_Messenger_Export
                 request.AddHeader("cache-control", "no-cache");
                 JObject response = JObject.Parse(client.Execute(request).Content);
 
-                name = response["name"].ToString();
-                File.AppendAllText(logLocation, DateTime.UtcNow + ": SUCCESS: " + uid + ": " + Name + Environment.NewLine);
+                result = response["name"].ToString();
+                
+                File.AppendAllText(logLocation, DateTime.UtcNow + ": SUCCESS: " + uid + ": " + result + Environment.NewLine);
 
             }
             catch (Exception e)
             {
                 File.AppendAllText(logLocation, DateTime.UtcNow + ": FAILURE: " + uid + ": " + e + Environment.NewLine);
 
-                return "";
+                return null;
 
                
             }
             //logger.Close();
 
 
-            return name;
+            return result;
         }
     }
 }
