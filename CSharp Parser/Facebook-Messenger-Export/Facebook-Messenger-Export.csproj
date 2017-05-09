@@ -89,6 +89,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bidictionary.cs" />
     <Compile Include="IdLookupFactory.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="JsonWrappers\MessageJsonWrapper.cs" />
