@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using Newtonsoft.Json;
 using System.IO;
+using System.Configuration;
 
 namespace Facebook_Messenger_Export
 {
@@ -115,10 +116,36 @@ namespace Facebook_Messenger_Export
                 senderId = Lookup.GetUID(facebookIdentifier); // should have already been added at the beginning of the thread
                 senderName = facebookIdentifier;
             }
+
+            // fixes emojis coded in with hex values and those simply represented by plain text like :)
+            string messageText = ReplacePlainTextEmojis(FixEmojiEncoding(paragraphTag.InnerText));
             
-           
-           
-            Messages.Add(new Message(paragraphTag.InnerText, time, UID, senderId, senderName));                           
+            Messages.Add(new Message(messageText, time, UID, senderId, senderName));                           
+        }
+
+        // win 1252 -> uni = r
+        // win 1252 (r) -> uni = final
+        private string FixEmojiEncoding(string s)
+        {
+            Encoding wind1252 = Encoding.GetEncoding(1252);
+            Encoding utf8 = Encoding.UTF8;
+            byte[] wind1252Bytes = wind1252.GetBytes(s);
+            byte[] utf8Bytes = Encoding.Convert(utf8, wind1252, wind1252Bytes);
+            
+            return utf8.GetString(utf8Bytes);
+
+          
+        }
+
+        private string ReplacePlainTextEmojis(string s)
+        {
+            List<List<string>> emojis = Utilities.ReadCSV(ConfigurationManager.AppSettings["private"] + "/emojimap.csv");
+
+            foreach(List<string> pair in emojis)
+            {
+                s.Replace(pair[0], pair[1]);
+            }
+            return s;
         }
         
 
