@@ -23,18 +23,34 @@ namespace Facebook_Messenger_Export
             
             
             HtmlDocument doc = new HtmlDocument();
-            string threadId = "29";
+            string threadId = "10";
             string privateLocation = ConfigurationManager.AppSettings["private"];
             doc.Load(privateLocation + @"\threads\" + threadId + ".html");
 
             IdLookupFactory factory = new IdLookupFactory(privateLocation+@"\idNames.csv");
 
             Thread test = new Thread(doc,0,factory);
-            test.WriteJsonToFile(privateLocation + @"\jsons\" + threadId + ".json");
+            test.WriteJsonToFile(privateLocation + @"\jsons\" + threadId + ".json",true);
             factory.AddToCSV(privateLocation + @"\idNames.csv");
             
+            /*
             
+            Encoding win52 = Encoding.GetEncoding("windows-1252");
+            Encoding unicode = Encoding.UTF8;
+
+           // string s = "Ã°Å¸ÂÂ»";
+          string s = "Ã°Å¸Â\u008dÂ»";
+            string normal = "Hello!";
+            
+            byte[] messageBytes = unicode.GetBytes(s);
+            byte[] beer = unicode.GetBytes("🍻");
+
            
+            */
+
+          
+
+            
 
             /*
             doc.Load(ConfigurationManager.AppSettings["messageLocation"]);
