@@ -25,24 +25,12 @@ namespace Facebook_Messenger_Export
 
         public void LoadFromFile(string path)
         {
-            StreamReader reader = new StreamReader(path);
 
-            bool isFirst = true;
-            while (reader.Peek() >= 0) // creds to http://www.sanfoundry.com/csharp-program-read-lines-until-end-file/
+            foreach(List<string> line in Utilities.ReadCSV(path))
             {
-                string[] line = reader.ReadLine().Split(',');
-                if (!isFirst) // first line should be the header
-                {
-                    
-                    idNames.Add(line[0], line[1]);
-                }
-                else
-                {
-                    isFirst = false; 
-                }
-                
+                idNames.Add(line[0], line[1]);
             }
-            reader.Close();
+            
         }
         
         public void AddToCSV(string path)
