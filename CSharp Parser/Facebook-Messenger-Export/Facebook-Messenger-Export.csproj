@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotNetOpenAuth.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
@@ -89,8 +90,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bidictionary.cs" />
-    <Compile Include="IdLookupFactory.cs" />
+    <Compile Include="Lookup\Bidictionary.cs" />
+    <Compile Include="Lookup\IdLookupFactory.cs" />
+    <Compile Include="Lookup\LookupResult.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="JsonWrappers\MessageJsonWrapper.cs" />
     <Compile Include="JsonWrappers\MomentJsonWrapper.cs" />

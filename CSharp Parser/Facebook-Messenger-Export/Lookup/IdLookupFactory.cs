@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;  
 
 namespace Facebook_Messenger_Export
 {
@@ -14,12 +15,14 @@ namespace Facebook_Messenger_Export
     {
 
 
-        BiDictionaryOneToOne<string, string> idNames; // uid, name
+        BiDictionaryOneToOne<string, LookupResult> idNames; // uid, name
+        Random random;
 
         public IdLookupFactory(string importPath = null)
         {
-            idNames = new BiDictionaryOneToOne<string, string>();
-            if(importPath!=null) LoadFromFile(importPath); 
+            idNames = new BiDictionaryOneToOne<string, LookupResult>();
+            if(importPath!=null) LoadFromFile(importPath);
+            random = new Random();
         }
 
 
@@ -28,7 +31,9 @@ namespace Facebook_Messenger_Export
 
             foreach(List<string> line in Utilities.ReadCSV(path))
             {
-                idNames.Add(line[0], line[1]);
+                bool isReal;
+                bool.TryParse(line[2], out isReal);
+                idNames.Add(line[0], new LookupResult(line[1],isReal));
             }
             
         }
@@ -37,7 +42,7 @@ namespace Facebook_Messenger_Export
         {
             
             List<string> uids = idNames.GetFirstKeys();
-            List<string> names = idNames.GetSecondKeys();
+            List<LookupResult> names = idNames.GetSecondKeys();
 
             // super costly/shitty way of doing this
             IdLookupFactory duplicateCheck = new IdLookupFactory(path);
@@ -48,7 +53,8 @@ namespace Facebook_Messenger_Export
             {
                 if (!duplicateCheck.ContainsUID(uids[i]))
                 {
-                    File.AppendAllText(path, uids[i] + "," + names[i] + Environment.NewLine);
+                    LookupResult name = names[i];
+                    File.AppendAllText(path, uids[i] + "," + name.Name +","+name.IsReal + Environment.NewLine);
                 }
                 
             }
@@ -74,7 +80,7 @@ namespace Facebook_Messenger_Export
         {
             try
             {
-                idNames.GetBySecond(name);
+                idNames.GetBySecond(new LookupResult(name,true)); // override means true/false shouldn't matter
 
             }
             catch (Exception e)
@@ -88,18 +94,18 @@ namespace Facebook_Messenger_Export
 
         public string GetUID(string name)
         {
-            return idNames.GetBySecond(name);
+            return idNames.GetBySecond(new LookupResult(name,true));
         }
         /// <summary>
         /// Use Facebook Graph API to get Name from UID
         /// </summary>
         /// <returns>The name. Can return null if not locateable</returns>
-        public string GetName(string uid)
+        public LookupResult GetName(string uid)
         {
-            string rtn;
+            LookupResult rtn;
             try
             {
-                Console.WriteLine("No API request");
+             //   Console.WriteLine("No API request");
                 rtn = idNames.GetByFirst(uid);
                 return rtn; 
             }
@@ -111,20 +117,23 @@ namespace Facebook_Messenger_Export
             }
         }
 
-        private string FBApiRequest(string uid)
+        private LookupResult FBApiRequest(string uid)
         {
 
             string logLocation = ConfigurationManager.AppSettings["private"] + @"\Logs\graph-api-logs.txt";
             string result;
+            JObject response = new JObject();
             try
             {
                 var url = "https://graph.facebook.com/v2.9/";
                 // Facebook OAuth is wonkily implemented. I got this information from a Postman request. I don't believe it should be reusable but it is.
-                var client = new RestClient(url + uid + "?oauth_token=" + ConfigurationManager.AppSettings["fbAccessToken"] + "&oauth_signature_method=HMAC-SHA1 " + "&oauth_timestamp=1494281247&oauth_nonce=NQBv1w&oauth_version=1.0&oauth_signature=fBcO9HTiU4gG%20FEHjnTRM5bFAbc%3D");
+                var client = new RestClient(url + uid + "?oauth_token=" + ConfigurationManager.AppSettings["fbAccessToken"] + 
+                    "&oauth_signature_method=HMAC-SHA1 " + 
+                    "&oauth_timestamp=1494281247&oauth_nonce=NQBv1w&oauth_version=1.0&oauth_signature=fBcO9HTiU4gG%20FEHjnTRM5bFAbc%3D");
                 var request = new RestRequest(Method.GET);
                 request.Timeout = 1000;
                 request.AddHeader("cache-control", "no-cache");
-                JObject response = JObject.Parse(client.Execute(request).Content);
+                response = JObject.Parse(client.Execute(request).Content);
 
                 result = response["name"].ToString();
                 
@@ -133,16 +142,16 @@ namespace Facebook_Messenger_Export
             }
             catch (Exception e)
             {
-                File.AppendAllText(logLocation, DateTime.UtcNow + ": FAILURE: " + uid + ": " + e + Environment.NewLine);
+                File.AppendAllText(logLocation, DateTime.UtcNow + ": FAILURE: " + uid + ": " + e +": " +  response.ToString(Formatting.None)+ Environment.NewLine);
 
-                return null;
+                return new LookupResult("Unknown" + random.NextDouble(), false);
 
                
             }
             //logger.Close();
 
 
-            return result;
+            return new LookupResult(result, true);
         }
     }
 }

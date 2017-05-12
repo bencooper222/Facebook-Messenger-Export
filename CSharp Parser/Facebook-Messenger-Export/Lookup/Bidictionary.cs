@@ -25,7 +25,7 @@ public class BiDictionaryOneToOne<TFirst, TSecond>
     /// <param name="second"></param>
     public void Add(TFirst first, TSecond second)
     {
-        if (firstToSecond.ContainsKey(first) || secondToFirst.ContainsKey(second))
+            if (firstToSecond.ContainsKey(first) || secondToFirst.ContainsKey(second))
             throw new ArgumentException("Duplicate first or second");
 
         firstToSecond.Add(first, second);
