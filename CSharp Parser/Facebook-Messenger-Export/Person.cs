@@ -27,6 +27,7 @@ namespace Facebook_Messenger_Export
         }
 
         public string UID { get; }
+        public bool RealName { get; set; } // whether or not the name was actually queried or just randomly generated
         public int Count { // total messages sent
             get
             {

@@ -50,7 +50,7 @@ namespace Facebook_Messenger_Export
 
             Messages = new List<Message>();
             for (int i= 0; i< nodes.Count; i+=2){
-                AddMessage(nodes[i].ChildNodes[1], nodes[i + 1]);
+                AddMessage(nodes[i].ChildNodes[0], nodes[i + 1]); // should be 1 in childnodes?
             }
             Messages.Reverse(); // because FB gives it most recent to least recent
         }
@@ -69,12 +69,14 @@ namespace Facebook_Messenger_Export
             List<Person> rtn = new List<Person>();
             foreach(string s in ids)
             {
-                string uidNoWhitespace = s.Trim();
+                string uidNoWhitespace = Utilities.CleanEmailAddress(s.Trim());
                 string uid = uidNoWhitespace.Remove(uidNoWhitespace.Length - 13, 13);
                 Person person = new Person(uid);
                 if (getNames)
                 {
-                    person.Name = Lookup.GetName(uid);
+                    LookupResult search = Lookup.GetName(uid);
+                    person.Name = search.Name;
+                    person.RealName = search.IsReal;
                 }
                 
                 rtn.Add(person);
@@ -96,7 +98,7 @@ namespace Facebook_Messenger_Export
             HtmlNodeCollection attributes = messageHeader.ChildNodes;
 
             // first tag
-            string facebookIdentifier = attributes[0].InnerText; // this could be in the form of UID@facebook.com or just simple first last name
+            string facebookIdentifier = Utilities.CleanEmailAddress(attributes[0].InnerText); // this could be in the form of UID@facebook.com or just simple first last name
 
             // process time (second tag)
             string rawTime = attributes[1].InnerText;
@@ -107,13 +109,18 @@ namespace Facebook_Messenger_Export
             if (facebookIdentifier.Contains("@"))
             {
                 // if it's in the form of UID@facebook.com
-                 senderId = facebookIdentifier.Remove(facebookIdentifier.Length - 13, 13);
-                senderName = Lookup.GetName(senderId); 
+                senderId = facebookIdentifier.Remove(facebookIdentifier.Length - 13, 13);
+                senderName = Lookup.GetName(senderId).Name; 
             }
             else
             {
                 // if it's just first and last name
-                senderId = Lookup.GetUID(facebookIdentifier); // should have already been added at the beginning of the thread
+
+              
+                    senderId = Lookup.GetUID(facebookIdentifier); // should have already been added at the beginning of the thread
+             
+              
+               
                 senderName = facebookIdentifier;
             }
 

@@ -47,5 +47,10 @@ namespace Facebook_Messenger_Export
             reader.Close();
             return rtn;
         }
+
+        public static string CleanEmailAddress(string email)
+        {
+            return email.Replace("&#064;", "@");
+        }
     }
 }
