@@ -12,12 +12,12 @@ namespace Facebook_Messenger_Export
     class ThreadSeparator
     {
         public HtmlNode ThreadContainer { get; set; }
-        private int internalIndex;
+        private int lastNumber;
     
         public ThreadSeparator(HtmlNode parentDiv)
         {
             ThreadContainer = parentDiv;
-            internalIndex = 0;
+            lastNumber = 0;
             
         }
 
@@ -50,11 +50,11 @@ namespace Facebook_Messenger_Export
             {
                 if (index % 2 != 0)
                 {
-                    WriteThread(node, (internalIndex-1)/2); // every other one in here will be invalid so this adjusts for that
+                    WriteThread(node, ++lastNumber); // every other one in here will be invalid so this adjusts for that
                 }
                 
                 index++;
-                internalIndex++;
+             
                 if (index % 10 == 0) // just to document progress
                 {
                     Console.WriteLine((double)index / count * 100 + " % complete");
