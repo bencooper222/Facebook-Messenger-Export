@@ -22,35 +22,27 @@ namespace Facebook_Messenger_Export
             }
             set
             {
+                
                 name = value;
             }
         }
 
         public string UID { get; }
         public bool RealName { get; set; } // whether or not the name was actually queried or just randomly generated
-        public int Count { // total messages sent
-            get
-            {
-                return count;
-            }
-        }
+    
         private int count;
         private string name;
+     
 
         public Person(string uid,string name = null)
         {
+            
             this.name = name;
             UID = uid;
+           
         }
 
-        /// <summary>
-        /// Increases the total messages sent by this person
-        /// </summary>
-        public void AddMessageCount()
-        {
-            count++;
-    //     DotNetOpenAuth.OAuth.ChannelElements.   
-        }
+   
 
         
 
