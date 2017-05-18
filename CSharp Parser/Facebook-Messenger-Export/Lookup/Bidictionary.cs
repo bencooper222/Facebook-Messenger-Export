@@ -25,7 +25,7 @@ public class BiDictionaryOneToOne<TFirst, TSecond>
     /// <param name="second"></param>
     public void Add(TFirst first, TSecond second)
     {
-            if (firstToSecond.ContainsKey(first) || secondToFirst.ContainsKey(second))
+        if (firstToSecond.ContainsKey(first) || secondToFirst.ContainsKey(second))
             throw new ArgumentException("Duplicate first or second");
 
         firstToSecond.Add(first, second);
@@ -46,6 +46,39 @@ public class BiDictionaryOneToOne<TFirst, TSecond>
 
         return second;
     }
+
+    /// <summary>
+    /// Looks up for key/val pair with first and updates its second with change
+    /// </summary>
+    /// <param name="first">The key to search by</param>
+    /// <param name="change">The  new value to update to</param>
+    public void ChangeSecondByFirst(TFirst first, TSecond change)
+    {
+        if (!firstToSecond.ContainsKey(first))
+        {
+            throw new ArgumentException("First DNE");
+
+        }
+
+        RemoveByFirst(first); // get rid of the old one
+
+        Add(first, change); // bring in the new one
+
+
+    }
+
+    public void ChangeFirstBySecond(TSecond second, TFirst change)
+    {
+        if (!secondToFirst.ContainsKey(second))
+        {
+            throw new ArgumentException("Second DNE");
+        }
+
+        RemoveBySecond(second); // get rid of the old one
+
+        Add(change, second); // bring in the new one
+    }
+
 
     /// <summary>
     /// Find the TFirst corresponing to the Second second.
@@ -197,7 +230,7 @@ public class BiDictionaryOneToOne<TFirst, TSecond>
     public List<TFirst> GetFirstKeys()
     {
         List<TFirst> rtn = new List<TFirst>();
-          foreach(TFirst s in firstToSecond.Keys)
+        foreach (TFirst s in firstToSecond.Keys)
         {
             rtn.Add(s);
         }
@@ -217,6 +250,6 @@ public class BiDictionaryOneToOne<TFirst, TSecond>
             rtn.Add(s);
         }
         return rtn;
-        
+
     }
 }
