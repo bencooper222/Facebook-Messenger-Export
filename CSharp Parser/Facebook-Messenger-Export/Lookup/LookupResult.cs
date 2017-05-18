@@ -9,26 +9,29 @@ namespace Facebook_Messenger_Export
     class LookupResult
     {
 
-        public string Name { get;}
+        public string Name;
         public bool IsReal { get; }
         
 
+
         public LookupResult(string name, bool isReal)
         {
+            
             Name = name;
+            
             IsReal = isReal;
         }
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode(); // this is an awful idea
+            return Name.GetHashCode(); // this is a great idea
         }
 
 
 
         public override bool Equals(object obj)
         {
-           
+
             if (!(obj is LookupResult))
             {
                 return false;
@@ -60,5 +63,5 @@ namespace Facebook_Messenger_Export
         }
     }
 
-    }
+}
 
